@@ -93,6 +93,17 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile --ignore-scripts
 
+      - name: Validate production delivery credentials
+        if: ${{ github.event_name == 'schedule' || inputs.dry_run == false }}
+        env:
+          GMAIL_USER: ${{ secrets.GMAIL_USER }}
+          GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
+          KINDLE_EMAIL: ${{ secrets.KINDLE_EMAIL }}
+        run: |
+          test -n "$GMAIL_USER" || { echo "GMAIL_USER is not configured in the public executor repository." >&2; exit 1; }
+          test -n "$GMAIL_APP_PASSWORD" || { echo "GMAIL_APP_PASSWORD is not configured in the public executor repository." >&2; exit 1; }
+          test -n "$KINDLE_EMAIL" || { echo "KINDLE_EMAIL is not configured in the public executor repository." >&2; exit 1; }
+
       - name: Run digest
         env:
           DRY_RUN: ${{ inputs.dry_run || 'false' }}
