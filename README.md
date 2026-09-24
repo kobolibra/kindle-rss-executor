@@ -10,15 +10,15 @@ The required secret is `PRIVATE_REPO_TOKEN`. It must be limited to the private r
 
 Digest also requires `GMAIL_USER`, `GMAIL_APP_PASSWORD`, `KINDLE_EMAIL`, `SMTP_HOST`, `SMTP_PORT`, `SMTP_SECURE`, and `SMTP_FROM` as Actions secrets. Do not expose these to pull-request workflows.
 
-## Planned workflows
+## Workflows
 
 - Collector: retain the private project's four daily collection windows and manual dry-run/feed selection.
-- Digest: retain manual dispatch semantics and all existing delivery inputs.
+- Digest: triggered by the external Manus schedule through `workflow_dispatch`; when the trigger omits inputs, the repository workflow defaults to a real delivery (`dry_run=false`). Set `dry_run=true` only for an intentional inspection run.
 - Both workflows share a private-state writer lock and never publish state as an artifact.
 
 ## First-run procedure
 
-Configure the secrets, run the collector in dry-run mode, then validate a real state-only collection. Validate the digest separately with a controlled manual delivery. Confirm that no public artifacts are created and that logs contain no feed URLs, article payloads, recipient addresses, or credentials. Keep the private repository's existing workflows enabled until validation is complete; only then disable the private daily path.
+Configure the secrets, run the collector in dry-run mode, then validate a real state-only collection. Validate the digest separately with an intentional `dry_run=true` inspection followed by a controlled real delivery. Confirm that no public artifacts are created and that logs contain no feed URLs, article payloads, recipient addresses, or credentials. The private repository is the canonical source; the public repository is the Actions executor.
 
 ## Non-negotiable rules
 

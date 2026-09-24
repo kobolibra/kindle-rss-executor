@@ -1,15 +1,12 @@
 name: RSS to Kindle Digest (public executor)
 
 on:
-  schedule:
-    # Asia/Shanghai 07:35 and 17:35 (UTC 23:35 and 09:35).
-    - cron: "35 9,23 * * *"
   workflow_dispatch:
     inputs:
       dry_run:
-        description: "Extract and build EPUBs without sending email or marking articles delivered"
+        description: "Safety override: extract and build EPUBs without sending email or marking articles delivered"
         required: false
-        default: true
+        default: false
         type: boolean
       verify_smtp:
         description: "Only verify SMTP credentials and connectivity"
