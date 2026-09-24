@@ -1,6 +1,9 @@
 name: RSS to Kindle Digest (public executor)
 
 on:
+  schedule:
+    # Asia/Shanghai 07:35 and 17:35 (UTC 23:35 and 09:35).
+    - cron: "35 9,23 * * *"
   workflow_dispatch:
     inputs:
       dry_run:
