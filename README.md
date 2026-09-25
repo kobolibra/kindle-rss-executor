@@ -12,7 +12,7 @@ Digest also requires `GMAIL_USER`, `GMAIL_APP_PASSWORD`, `KINDLE_EMAIL`, `SMTP_H
 
 ## Workflows
 
-- Collector: retain the private project's four daily collection windows and manual dry-run/feed selection.
+- Collector: runs four times daily at 10:35, 16:35, 22:35, and 04:35 Asia/Shanghai (UTC 02:35, 08:35, 14:35, and 20:35), with manual dry-run/feed selection.
 - Digest: scheduled directly in this public repository at 07:35 and 17:35 Asia/Shanghai, with manual `workflow_dispatch` also available. Scheduled runs use the repository workflow default of real delivery (`dry_run=false`). Set `dry_run=true` only for an intentional inspection run.
 - Both workflows share a private-state writer lock and never publish state as an artifact.
 

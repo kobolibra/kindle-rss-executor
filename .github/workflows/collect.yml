@@ -2,7 +2,7 @@ name: RSS Collector (public executor)
 
 on:
   schedule:
-    # Collect four times daily; the two pre-Digest runs are one hour before delivery.
+    # UTC 02:35, 08:35, 14:35, 20:35 = Asia/Shanghai 10:35, 16:35, 22:35, 04:35.
     - cron: "35 2,8,14,20 * * *"
   workflow_dispatch:
     inputs:
