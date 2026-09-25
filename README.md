@@ -13,7 +13,7 @@ Digest also requires `GMAIL_USER`, `GMAIL_APP_PASSWORD`, `KINDLE_EMAIL`, `SMTP_H
 ## Workflows
 
 - Collector: retain the private project's four daily collection windows and manual dry-run/feed selection.
-- Digest: triggered by the external Manus schedule through `workflow_dispatch`; when the trigger omits inputs, the repository workflow defaults to a real delivery (`dry_run=false`). Set `dry_run=true` only for an intentional inspection run.
+- Digest: scheduled directly in this public repository at 07:35 and 17:35 Asia/Shanghai, with manual `workflow_dispatch` also available. Scheduled runs use the repository workflow default of real delivery (`dry_run=false`). Set `dry_run=true` only for an intentional inspection run.
 - Both workflows share a private-state writer lock and never publish state as an artifact.
 
 ## First-run procedure
