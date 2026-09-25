@@ -1,29 +1,26 @@
 # Kindle RSS Executor
 
-This repository is a **public Actions runner project** for the private canonical repository `kobolibra/kindle-rss-github`.
-
-## Security boundary
-
-This repository must never contain the real feed configuration, `state/delivery-state.json`, article history, SMTP values, Kindle address, or generated EPUBs. Each workflow checks out the private repository into a temporary runner directory, runs the collector or digest there, and pushes only the updated state file back to the private repository.
-
-The required secret is `PRIVATE_REPO_TOKEN`. It must be limited to the private repository with Contents read/write and Metadata read. Do not grant administration, visibility, Actions-write, or repository-deletion permissions.
-
-Digest also requires `GMAIL_USER`, `GMAIL_APP_PASSWORD`, `KINDLE_EMAIL`, `SMTP_HOST`, `SMTP_PORT`, `SMTP_SECURE`, and `SMTP_FROM` as Actions secrets. Do not expose these to pull-request workflows.
+A public GitHub Actions execution project for RSS collection, EPUB generation, and email delivery.
 
 ## Workflows
 
-- Collector: runs four times daily at 10:35, 16:35, 22:35, and 04:35 Asia/Shanghai (UTC 02:35, 08:35, 14:35, and 20:35), with manual dry-run/feed selection.
-- Digest: triggered by the Manus cloud schedule at 07:35 and 17:35 Asia/Shanghai, with manual `workflow_dispatch` also available. The Manus trigger sends `dry_run=false`; the workflow also defaults to real delivery when inputs are omitted. Set `dry_run=true` only for an intentional inspection run.
-- Both workflows share a private-state writer lock and never publish state as an artifact.
+- **Collector:** runs four daily collection windows at 04:35, 10:35, 16:35, and 22:35 Asia/Shanghai, with manual feed selection and inspection support.
+- **Digest:** is triggered by an external scheduled task at 07:35 and 17:35 Asia/Shanghai, with manual `workflow_dispatch` also available. Production runs use `dry_run=false`; use `dry_run=true` only for an intentional inspection run.
 
-## First-run procedure
+Both workflows share a state-writer concurrency lock and avoid publishing operational data as workflow artifacts.
 
-Configure the secrets, run the collector in dry-run mode, then validate a real state-only collection. Validate the digest separately with an intentional `dry_run=true` inspection followed by a controlled real delivery. Confirm that no public artifacts are created and that logs contain no feed URLs, article payloads, recipient addresses, or credentials. The private repository is the canonical source; the public repository is the Actions executor.
+## Runtime security
 
-## Non-negotiable rules
+Operational configuration, delivery state, article history, email settings, and generated EPUBs are supplied only at runtime through protected integrations and secrets. They must never be committed to this public repository or printed in logs.
 
-- Do not commit `config/feeds.json` or `state/delivery-state.json` here.
-- Do not upload private state, article content, or EPUBs as public artifacts.
-- Do not print feed URLs, article payloads, SMTP values, or recipient addresses.
-- Use the shared `rss-state-writer` concurrency group.
-- Never allow fork pull-request workflows to access private-repository or SMTP secrets.
+The workflows are intentionally limited to the permissions required for execution and state synchronization. Do not expose runtime credentials to pull-request workflows or upload operational files as public artifacts.
+
+## Operational guidance
+
+Run the Collector before a Digest window when fresh RSS content is required. Use the Digest dry-run mode to inspect EPUB generation without sending email or marking content delivered. Use a normal production run for actual delivery, and verify the resulting delivery state through the application console.
+
+## Security
+
+Report suspected credential exposure or sensitive-data leakage privately to the repository owner. Never post tokens, passwords, recipient addresses, feed URLs, article content, delivery state, or generated EPUBs in issues or pull requests.
+
+<!-- This public README intentionally documents capabilities only and omits deployment topology, source repositories, secret names, and storage details. -->
