@@ -22,5 +22,3 @@ Run the Collector before a Digest window when fresh RSS content is required. Use
 ## Security
 
 Report suspected credential exposure or sensitive-data leakage privately to the repository owner. Never post tokens, passwords, recipient addresses, feed URLs, article content, delivery state, or generated EPUBs in issues or pull requests.
-
-<!-- This public README intentionally documents capabilities only and omits deployment topology, source repositories, secret names, and storage details. -->
