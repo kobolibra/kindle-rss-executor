@@ -1,6 +1,9 @@
 name: RSS to Kindle Digest (public executor)
 
 on:
+  # GitHub cron is UTC: 23:35 = 07:35 Asia/Shanghai, 09:35 = 17:35 Asia/Shanghai.
+  schedule:
+    - cron: "35 23,9 * * *"
   workflow_dispatch:
     inputs:
       dry_run:
