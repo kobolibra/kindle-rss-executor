@@ -1,9 +1,8 @@
 name: RSS to Kindle Digest (public executor)
 
 on:
-  # GitHub cron is UTC: 23:35 = 07:35 Asia/Shanghai, 09:35 = 17:35 Asia/Shanghai.
-  schedule:
-    - cron: "35 23,9 * * *"
+  # Production dispatch is owned by the Manus WebDev HTTP Heartbeat.
+  # Keep workflow_dispatch for the Manus trigger and explicit manual runs.
   workflow_dispatch:
     inputs:
       dry_run:
