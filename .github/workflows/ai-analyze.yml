@@ -82,6 +82,10 @@ jobs:
           ${{ success() &&
               !(github.event_name == 'workflow_dispatch' && inputs.dry_run) }}
         run: |
+          if [ ! -d state/ai-analysis ]; then
+            echo "No AI analysis directory to persist."
+            exit 0
+          fi
           git add -A -- state/ai-analysis
           if git diff --cached --quiet; then
             echo "No new AI analysis to commit."
