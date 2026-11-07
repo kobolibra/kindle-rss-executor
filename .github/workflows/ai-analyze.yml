@@ -1,15 +1,11 @@
 name: AI Reading Editor (private articles, public executor)
 
 on:
-  workflow_run:
-    workflows:
-      - RSS Collector (public executor)
-    types: [completed]
   schedule:
-    # UTC: 02:55/08:55/14:55/20:55 = Beijing 10:55/16:55/22:55/04:55.
-    # Pre-delivery reconciliation: UTC 23:05/09:05 = Beijing 07:05/17:05.
-    - cron: "55 2,8,14,20 * * *"
-    - cron: "5 9,23 * * *"
+    # Beijing 05:15 and 16:45, ahead of 07:35 and 17:36 delivery.
+    # GitHub schedules are best effort; Digest never waits for AI.
+    - cron: "15 21 * * *"
+    - cron: "45 8 * * *"
   workflow_dispatch:
     inputs:
       dry_run:
@@ -30,9 +26,7 @@ concurrency:
 jobs:
   analyze:
     if: >-
-      ${{ vars.AI_ENABLED == 'true' &&
-          (github.event_name != 'workflow_run' ||
-           github.event.workflow_run.conclusion == 'success') }}
+      ${{ vars.AI_ENABLED == 'true' }}
     runs-on: ubuntu-latest
     timeout-minutes: 35
     defaults:
